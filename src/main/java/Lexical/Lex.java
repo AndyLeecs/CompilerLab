@@ -28,7 +28,7 @@ public class Lex {
             nfaList.add(fanode);
         }
 //        FANode mergedNFA = RE.mergeNFA(nfaList);
-        List<Dstate> finalminDFA = DFA.toMinDFA(nfaList, names);
+        List<Dstate> finalminDFA = new DFA().toMinDFA(nfaList, names);
         for (Dstate dstate : finalminDFA)
         {
             if (dstate.getName().equals("reservedWords")) {
@@ -38,38 +38,6 @@ public class Lex {
         }
         Storage.store(finalminDFA,new FileOutputStream(new File("a.xml")));
         System.out.println("store finished");
-        finalminDFA = (List<Dstate>)Storage.load(new FileInputStream("a.xml"));
-        System.out.println("load finished"+finalminDFA.get(0));
-        char[] input = Reader.read(name+".txt");
-        int start = 0;
-        int end = 0;
-        ArrayList<Token> tokens = new ArrayList<Token>();
-        TokenAndPos tokenAndPos = null;
-        while(input[start] != '$') {
-            if(input[start] == '\n' || input[start] == ' ') {
-                start++;
-                continue;
-            }
-                tokenAndPos = DFA.check(start, input, finalminDFA);
-                if(tokenAndPos != null){
-                end = tokenAndPos.getEnd();
-                    StringBuffer s = new StringBuffer();
-                    for(int i = start ; i <= end; i++){
-                        s.append(input[i]);
-                    }
-                    tokens.add(tokenAndPos.getToken());
-                    start = end + 1;
-                }
-                 else
-                    {
-                        System.out.println("no matched pattern"); //后添加具体错误信息
-                        return;
-                    }
-            }
-//        for(Token token : tokens){
-////            System.out.println(token);
-////        }
-        System.out.println("start to write result");
-        Writer.output(tokens, this.getClass().getClassLoader().getResource(name+".txt").getPath());
+
     }
 }

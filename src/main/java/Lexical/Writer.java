@@ -10,8 +10,10 @@ public class Writer {
 
     public static void output(List<Token> output, String inputFile) throws IOException {
 
-        String[] splits = inputFile.split("\\.");
-        File outputFile = new File(splits[0] + "res.txt");
+//        String[] splits = inputFile.split("\\.");
+//        File outputFile = new File(splits[0] + "res.txt");
+        File outputFile = new File(inputFile+ "res.txt");
+
         if (!outputFile.exists())
             outputFile.createNewFile();
         BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile, false));

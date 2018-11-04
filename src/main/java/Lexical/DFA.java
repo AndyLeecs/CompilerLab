@@ -4,12 +4,12 @@ import java.io.*;
 import java.util.*;
 
 public class DFA {
-    public static char[] allow;//may be removed afterwards
-    public static HashMap<Integer, FANode> map;
-    public static ArrayList<FANode> nodes = new ArrayList<FANode>();
-    private static ArrayList<Dstate> dstates = new ArrayList<Dstate>();
+    public static char[] allow;
+    private HashMap<Integer, FANode> map;
+    private ArrayList<FANode> nodes = new ArrayList<FANode>();
+    private ArrayList<Dstate> dstates = new ArrayList<Dstate>();
 
-    public static List<Dstate> toMinDFA(ArrayList<FANode> nfaList, ArrayList<String> names) {
+    public List<Dstate> toMinDFA(ArrayList<FANode> nfaList, ArrayList<String> names) {
         //merge NFAs
         FANode nfa = RE.mergeNFA(nfaList, names);
         nfaList = null;
@@ -166,7 +166,7 @@ public class DFA {
         return finalDstates;
     }
 
-    private static boolean sameGroup(Dstate dstate1, Dstate dstate2, ArrayList<ArrayList<Dstate>> partition) {
+    private boolean sameGroup(Dstate dstate1, Dstate dstate2, ArrayList<ArrayList<Dstate>> partition) {
         for (ArrayList<Dstate> group : partition
                 ) {
             if (group.contains(dstate1) && group.contains(dstate2)) return true;
@@ -174,7 +174,7 @@ public class DFA {
         return false;
     }
 
-    private static boolean stillSameGroup(Dstate dstate1, Dstate dstate2, ArrayList<ArrayList<Dstate>> partition) {
+    private boolean stillSameGroup(Dstate dstate1, Dstate dstate2, ArrayList<ArrayList<Dstate>> partition) {
         Iterator<Map.Entry<Character, Dstate>> iter1 = dstate1.getDtrans().entrySet().iterator();
         while (iter1.hasNext()) {
             Map.Entry<Character, Dstate> entry1 = iter1.next();
@@ -188,7 +188,7 @@ public class DFA {
         return true;
     }
 
-    private static Dstate findInDStates(Dstate target) {
+    private Dstate findInDStates(Dstate target) {
         for (Dstate state : dstates) {
             if (state.equals(target)) {
 //                System.out.println("already have the state");
@@ -199,7 +199,7 @@ public class DFA {
         return target;
     }
 
-    private static Dstate getMoveBy(char c, Dstate cur) {
+    private Dstate getMoveBy(char c, Dstate cur) {
         List<FANode> list = new ArrayList<FANode>();
         for (FANode node : cur.getEpiclosure()) {
             if (node.getC() == c) {
@@ -210,14 +210,14 @@ public class DFA {
         return epiclosure(list);
     }
 
-    private static Dstate getUnmarkedState(ArrayList<Dstate> dstates) {
+    private Dstate getUnmarkedState(ArrayList<Dstate> dstates) {
         for (Dstate dstate : dstates) {
             if (!dstate.isMarked()) return dstate;
         }
         return null;
     }
 
-    private static Dstate epiclosure(List<FANode> list) {
+    private Dstate epiclosure(List<FANode> list) {
         //原状态压栈,初始化返回值列表
         Stack<FANode> stack = new Stack<FANode>();
         List<FANode> finalepiclosure = new ArrayList<FANode>();
@@ -245,7 +245,7 @@ public class DFA {
         return res;
     }
 
-    private static void getChildren(FANode nfa) {
+    private void getChildren(FANode nfa) {
         FANode cur = nfa;
         int state = nfa.getState();
         nodes.add(cur);
@@ -259,84 +259,6 @@ public class DFA {
         }
     }
 
-    public static TokenAndPos check(int start, char[] input, List<Dstate> finalminDFA) {
-        char c;
-        Dstate dstate = finalminDFA.get(0);
-        Stack<Dstate> stack = new Stack<Dstate>();
-        stack.push(dstate);
-        int ptr = start;
-        StringBuffer s = new StringBuffer();
-        while (true) {
-            c = input[ptr];
-            if (c == '\n') return getTokenAndPos(start, stack, s);
-//            System.out.println("start checking " + c);
-            assert dstate != null;
-            dstate = dstate.getMapValue(c);
-            //回退
-            if (dstate == null) {
-                while (true) {
-                    TokenAndPos name = getTokenAndPos(start, stack, s);
-                    if (name != null) return name;
-                }
-            } else {
-                stack.push(dstate);
-                ptr++;
-                s.append(c);
-            }
-        }
-    }
 
-    private static TokenAndPos getTokenAndPos(int start, Stack<Dstate> stack, StringBuffer s) {
 
-        if (!stack.isEmpty()) {
-            Dstate cur = stack.pop();
-            String name = cur.getName();
-            if (name.length() != 0) {
-                return new TokenAndPos(name, s.toString(), start + s.length() - 1);
-            }
-        }
-        return null;
-    }
-
-    public static void main(String args[]) {
-        ArrayList<FANode> list = new ArrayList<FANode>();
-//        list.add(new RE("","").postToNfa("a*"));
-//        list.add(new RE("","").postToNfa("ab."));
-//        FANode NFA = RE.mergeNFA(list);
-//        getChildren(NFA);
-//        for (FANode node : nodes)
-//        System.out.println(node);
-        FANode nfa = new RE("", "(a|b)*abb").toNFA();
-        list.add(nfa);
-//        getChildren(nfa);
-//        list.add(nodes.get(0));
-//        dstates.add(epiclosure(list));
-//        Dstate cur;
-        try {
-            BufferedReader br =
-                    new BufferedReader(new InputStreamReader
-                            (new FileInputStream(new File(Lex.class.getClassLoader().getResource("tryrule.txt").getPath())),
-                                    "UTF-8"));
-            DFA.allow = br.readLine().toCharArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//
-//        while ((cur = getUnmarkedState(dstates))!=null){
-//            for(char c : allow) {
-//                Dstate move = getMoveBy(c, cur);
-//                move = findInDStates(move);
-//                cur.addToMap(c, move);
-////                if(dstates.size() == 4){
-////                    System.out.println(dstates.get(1).equals(dstates.get(3)));
-////                    System.out.println(dstates.get(0).getEpiclosure());
-////                    System.out.println(dstates.get(3).getEpiclosure());
-////                }
-//            }
-//        }
-//        System.out.println(dstates);
-        ArrayList<String> names = new ArrayList<String>();
-        names.add("it");
-        toMinDFA(list, names);
-    }
-}
+ }
