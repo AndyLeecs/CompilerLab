@@ -4,19 +4,19 @@ import java.util.*;
 
 public class DFA {
     public static char[] allow;
-    private ArrayList<FANode> nodes = new ArrayList<>();
+    private ArrayList<NFANode> nodes = new ArrayList<>();
     private ArrayList<Dstate> dstates = new ArrayList<>();
 
-    public List<Dstate> toMinDFA(ArrayList<FANode> nfaList, ArrayList<String> names) {
+    public List<Dstate> toMinDFA(ArrayList<NFANode> nfaList, ArrayList<String> names) {
         //merge NFAs
-        FANode nfa = RE.mergeNFA(nfaList, names);
+        NFANode nfa = RE.mergeNFA(nfaList, names);
         //NFA TO DFA
 
         //得到状态编号
         getChildren(nfa);
 
         //子集构造法
-        ArrayList<FANode> nodesToGetClosure = new ArrayList<>();
+        ArrayList<NFANode> nodesToGetClosure = new ArrayList<>();
         nodesToGetClosure.add(nodes.get(0));
         dstates.add(epiclosure(nodesToGetClosure));
         Dstate cur;
@@ -36,16 +36,15 @@ public class DFA {
         ArrayList<Dstate> unfinals = new ArrayList<>();
 
         //找到终结态FAnode(reserveWords的node优先考虑)
-        ArrayList<FANode> last = new ArrayList<>();
-        for (FANode node : nodes) {
+        ArrayList<NFANode> last = new ArrayList<>();
+        for (NFANode node : nodes) {
             if (node.getState() == -1) {
                 last.add(node);
             }
         }
-        System.out.println("last" + last.size());
         for (Dstate dstate : dstates) {
-            List<FANode> closure = dstate.getEpiclosure();
-            for (FANode node : last) {
+            List<NFANode> closure = dstate.getEpiclosure();
+            for (NFANode node : last) {
                 if (closure.contains(node)) {
                     dstate.setName(node.getName());
                     finals.add(dstate);
@@ -66,7 +65,6 @@ public class DFA {
         while (true) {
             for (int i = 0; i < partition.size(); i++) {
                 ArrayList<Dstate> group = partition.get(i);
-                System.out.println(group.size());
                 ArrayList<ArrayList<Dstate>> newGroups = new ArrayList<>();
                 //将group划分成更小的组
                 for (Dstate dstate : group) {
@@ -75,7 +73,6 @@ public class DFA {
                         newgroup.add(dstate);
                         newGroups.add(newgroup);
                     } else {
-//                        System.out.println("start checking same group");
                         for (int j = 0; j < newGroups.size(); j++) {
                             ArrayList<Dstate> newgroup = newGroups.get(j);
                             if (newgroup.contains(dstate)) break;
@@ -94,7 +91,6 @@ public class DFA {
                 //在新的分划里面用newgroup来替代group
                 if (newGroups.size() != 1) {
                     newPartition.remove(group);
-                    System.out.println(newGroups.size());
                     for (ArrayList<Dstate> list : newGroups) {
                         newPartition.add(list);
                     }
@@ -173,8 +169,8 @@ public class DFA {
     }
 
     private Dstate getMoveBy(char c, Dstate cur) {
-        List<FANode> list = new ArrayList<>();
-        for (FANode node : cur.getEpiclosure()) {
+        List<NFANode> list = new ArrayList<>();
+        for (NFANode node : cur.getEpiclosure()) {
             if (node.getC() == c) {
                 list.add(node.getOutnodes().get(0));
             }
@@ -190,25 +186,25 @@ public class DFA {
         return null;
     }
 
-    private Dstate epiclosure(List<FANode> list) {
+    private Dstate epiclosure(List<NFANode> list) {
         //原状态压栈,初始化返回值列表
-        Stack<FANode> stack = new Stack<>();
-        List<FANode> finalepiclosure = new ArrayList<>();
-        for (FANode faNode : list) {
-            stack.push(faNode);
-            finalepiclosure.add(faNode);
+        Stack<NFANode> stack = new Stack<>();
+        List<NFANode> finalepiclosure = new ArrayList<>();
+        for (NFANode NFANode : list) {
+            stack.push(NFANode);
+            finalepiclosure.add(NFANode);
         }
 
         //计算
         while (!stack.isEmpty()) {
-            FANode node = stack.pop();
+            NFANode node = stack.pop();
             //如果出边不是有字母的边而且不是终结态
             if (node.getC() == '\0' && node.getState() != -1) {
-                ArrayList<FANode> outnodes = node.getOutnodes();
-                for (FANode faNode : outnodes) {
-                    if (!stack.contains(faNode)) {
-                        finalepiclosure.add(faNode);
-                        stack.push(faNode);
+                ArrayList<NFANode> outnodes = node.getOutnodes();
+                for (NFANode NFANode : outnodes) {
+                    if (!stack.contains(NFANode)) {
+                        finalepiclosure.add(NFANode);
+                        stack.push(NFANode);
                     }
                 }
             }
@@ -216,12 +212,12 @@ public class DFA {
         return new Dstate(finalepiclosure);
     }
 
-    private void getChildren(FANode nfa) {
+    private void getChildren(NFANode nfa) {
         int state = nfa.getState();
         nodes.add(nfa);
         nfa.setVisited();
         if (state == -1) return;
-        ArrayList<FANode> out = nfa.getOutnodes();
+        ArrayList<NFANode> out = nfa.getOutnodes();
         for (int i = 0; i < out.size(); i++) {
             if (!out.get(i).visited) {
                 getChildren(out.get(i));

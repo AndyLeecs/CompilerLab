@@ -10,7 +10,7 @@ public class Writer {
 
     public static void output(List<Token> output, String inputFile) throws IOException {
 
-        File outputFile = new File(inputFile + "res.txt");
+        File outputFile = new File(inputFile + "_res.txt");
 
         BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile, false));
 

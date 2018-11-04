@@ -1,0 +1,6 @@
+package Lexical;
+
+public class Input {
+    int i = 0;
+    i += 1;
+}

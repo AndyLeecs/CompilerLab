@@ -7,15 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 public class Dstate implements Serializable {
+    private static final long serialVersionUID = 1L ;
     private int tag; //标记在最终partition中group的index
-    private List<FANode> epiclosure = new ArrayList<>();
+    private List<NFANode> epiclosure = new ArrayList<>();
     private Map<Character, Dstate> Dtrans = new HashMap<>();
     private String name = "";//标记终结态的名字
 
     public Dstate() {
     }
 
-    public Dstate(List<FANode> epiclosure) {
+    Dstate(List<NFANode> epiclosure) {
         this.epiclosure = epiclosure;
     }
 
@@ -47,7 +48,7 @@ public class Dstate implements Serializable {
         Dtrans.put(c, faNode);
     }
 
-    public List<FANode> getEpiclosure() {
+    public List<NFANode> getEpiclosure() {
         return epiclosure;
     }
 
@@ -57,10 +58,10 @@ public class Dstate implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        List<FANode> list = ((Dstate) obj).epiclosure;
+        List<NFANode> list = ((Dstate) obj).epiclosure;
         if (list.size() != epiclosure.size()) return false;
-        for (FANode node1 : list) {
-            for (FANode node2 : epiclosure) {
+        for (NFANode node1 : list) {
+            for (NFANode node2 : epiclosure) {
                 if (node1 == node2) break;
                 if (epiclosure.indexOf(node2) == (epiclosure.size() - 1)) {
                     return false;

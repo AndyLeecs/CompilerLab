@@ -10,36 +10,36 @@ public class RE {
         this.content = content;
     }
 
-    public static FANode mergeNFA(ArrayList<FANode> list, ArrayList<String> names) {
-        FANode start = new FANode(2);
+    public static NFANode mergeNFA(ArrayList<NFANode> list, ArrayList<String> names) {
+        NFANode start = new NFANode(2);
         for (int i = 0; i < list.size(); i++) {
-            FANode fa = list.get(i);
+            NFANode fa = list.get(i);
             fa.getEndAt().setName(names.get(i));
             start.addToOutNodes(fa);
         }
         return start;
     }
 
-    public FANode toNFA() {
+    public NFANode toNFA() {
         String contentAfterAddingDots = getContentAfterAddingDots();
         String postContent = getPostContent(contentAfterAddingDots);
         return postToNfa(postContent);
     }
 
-    private FANode postToNfa(String s) {
-        Stack<FANode> stack = new Stack<>();
+    private NFANode postToNfa(String s) {
+        Stack<NFANode> stack = new Stack<>();
         for (int i = 0; i < s.length(); i++) {
             char cur = s.charAt(i);
             if (!isOperator(cur)) {
-                FANode single = single(cur);
+                NFANode single = single(cur);
                 stack.push(single);
             } else {
-                FANode later = stack.pop();
-                FANode res = null;
+                NFANode later = stack.pop();
+                NFANode res = null;
                 if (cur == '*') {
                     res = closure(later);
                 } else {
-                    FANode former = stack.pop();
+                    NFANode former = stack.pop();
 
                     if (cur == '.') {
                         res = concat(former, later);
@@ -53,17 +53,17 @@ public class RE {
         return stack.pop();
     }
 
-    private FANode closure(FANode later) {
+    private NFANode closure(NFANode later) {
         //新建开始和结束节点
-        FANode start = new FANode(0);
-        FANode end = new FANode(-1);
+        NFANode start = new NFANode(0);
+        NFANode end = new NFANode(-1);
         //开始节点连接到结束节点，和原来的开始节点上
-        ArrayList<FANode> listToAddToStart = new ArrayList<>();
+        ArrayList<NFANode> listToAddToStart = new ArrayList<>();
         listToAddToStart.add(later);
         listToAddToStart.add(end);
         start.setOutnodes(listToAddToStart);
         //原来的结束节点连接到新结束节点和原来的开始节点上
-        ArrayList<FANode> listToAdd = new ArrayList<>();
+        ArrayList<NFANode> listToAdd = new ArrayList<>();
         listToAdd.add(end);
         listToAdd.add(later);
         findLastAndAddOutNodes(later, listToAdd);
@@ -72,17 +72,17 @@ public class RE {
         return start;
     }
 
-    private FANode union(FANode former, FANode later) {
+    private NFANode union(NFANode former, NFANode later) {
         //新建开始和结束节点
-        FANode start = new FANode(0);
-        FANode end = new FANode(-1);
+        NFANode start = new NFANode(0);
+        NFANode end = new NFANode(-1);
         //开始节点连接到原来的两个开始节点上
-        ArrayList<FANode> listToAddToStart = new ArrayList<>();
+        ArrayList<NFANode> listToAddToStart = new ArrayList<>();
         listToAddToStart.add(former);
         listToAddToStart.add(later);
         start.setOutnodes(listToAddToStart);
 
-        ArrayList<FANode> listToAdd = new ArrayList<>();
+        ArrayList<NFANode> listToAdd = new ArrayList<>();
         listToAdd.add(end);
         findLastAndAddOutNodes(former, listToAdd);
         findLastAndAddOutNodes(later, listToAdd);
@@ -91,11 +91,11 @@ public class RE {
         return start;
     }
 
-    private FANode concat(FANode former, FANode later) {
+    private NFANode concat(NFANode former, NFANode later) {
 
-//        ArrayList<FANode> toConcat = later.getOutnodes();
+//        ArrayList<NFANode> toConcat = later.getOutnodes();
         //连接former和later
-        ArrayList<FANode> toConcat = new ArrayList<>();
+        ArrayList<NFANode> toConcat = new ArrayList<>();
         toConcat.add(later);
         findLastAndAddOutNodes(former, toConcat);
         //把该小自动机置终结态为later的终结态
@@ -103,20 +103,20 @@ public class RE {
         return former;
     }
 
-    private void findLastAndAddOutNodes(FANode node, ArrayList<FANode> outs) {
-        FANode last = findLast(node);
+    private void findLastAndAddOutNodes(NFANode node, ArrayList<NFANode> outs) {
+        NFANode last = findLast(node);
         last.setOutnodes(outs);
     }
 
-    private FANode findLast(FANode node) {
-        FANode end = node.getEndAt();
+    private NFANode findLast(NFANode node) {
+        NFANode end = node.getEndAt();
         node.setEndAt(null);
         return end;
     }
 
-    private FANode single(char c) {
-        FANode start = new FANode(c, 1);
-        FANode end = new FANode(-1);
+    private NFANode single(char c) {
+        NFANode start = new NFANode(c, 1);
+        NFANode end = new NFANode(-1);
         start.addToOutNodes(end);
         start.setEndAt(end);
         return start;

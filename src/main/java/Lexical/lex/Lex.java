@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Lex {
-    private static final String name = "simple";
+    private static final String name = "single";
 
     public static void main(String args[]) {
         try {
@@ -35,19 +35,17 @@ public class Lex {
             names.add(strs[0]);
         }
         br.close();
-        ArrayList<FANode> nfaList = new ArrayList<>();
+        ArrayList<NFANode> nfaList = new ArrayList<>();
         for (RE re : reList) {
-            FANode fanode = re.toNFA();
+            NFANode fanode = re.toNFA();
             nfaList.add(fanode);
         }
         List<Dstate> finalminDFA = new DFA().toMinDFA(nfaList, names);
-        for (Dstate dstate : finalminDFA) {
-            if (dstate.getName().equals("reservedWords")) {
-                System.out.println(dstate);
-                System.out.println("find reservedWords");
-            }
+//        Storage.store(finalminDFA, new FileOutputStream(new File("generationfile")));
+        try {
+            Storage.serialize(finalminDFA, new File(name+"_generationfile"));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        Storage.store(finalminDFA, new FileOutputStream(new File("a.xml")));
-        System.out.println("store finished");
     }
 }

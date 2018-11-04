@@ -3,23 +3,24 @@ package Lexical.lex;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class FANode implements Serializable {
+public class NFANode implements Serializable {
+    private static final long serialVersionUID = 1L ;
     boolean visited = false;
     private int state; //1代表只有一条出边，此时char为出边上的字母，0代表有两条epi出边，-1代表终结态,2表示有多条epi出边,-2表示未指定其状态
-    private ArrayList<FANode> outnodes = new ArrayList<>();
+    private ArrayList<NFANode> outnodes = new ArrayList<>();
     private char c = '\0';
-    private FANode endAt;
+    private NFANode endAt;
     private String name = "";//用于标识终结态的名字
 
-    public FANode() {
+    public NFANode() {
         this.state = -2;
     }
 
-    public FANode(int state) {
+    NFANode(int state) {
         this.state = state;
     }
 
-    public FANode(char c, int state) {
+    NFANode(char c, int state) {
         this.c = c;
         this.state = state;
     }
@@ -36,11 +37,11 @@ public class FANode implements Serializable {
         return c;
     }
 
-    public FANode getEndAt() {
+    public NFANode getEndAt() {
         return endAt;
     }
 
-    public void setEndAt(FANode endAt) {
+    public void setEndAt(NFANode endAt) {
         this.endAt = endAt;
     }
 
@@ -48,8 +49,8 @@ public class FANode implements Serializable {
         return state;
     }
 
-    public void addToOutNodes(FANode FANode) {
-        outnodes.add(FANode);
+    public void addToOutNodes(NFANode NFANode) {
+        outnodes.add(NFANode);
         checkState();
     }
 
@@ -65,28 +66,13 @@ public class FANode implements Serializable {
     public void setVisited() {
         visited = true;
     }
-//    @Override
-//    public String toString() {
-//        StringBuffer s = new StringBuffer();
-//        s.append("state" + state + "char" + c + "\n");
-//        setVisited();
-//        if(state != -1) {
-//            ArrayList<FANode> nodes = outnodes;
-//            for (int i = 0; i < nodes.size(); i++) {
-//                if(!nodes.get(i).visited)
-//                s.append(nodes.get(i).toString());
-//            }
-//        }
-//        return s.toString();
-//    }
 
-    public ArrayList<FANode> getOutnodes() {
+    public ArrayList<NFANode> getOutnodes() {
         return outnodes;
     }
 
-    public void setOutnodes(ArrayList<FANode> outnodes) {
+    public void setOutnodes(ArrayList<NFANode> outnodes) {
         this.outnodes = outnodes;
         checkState();
-//        System.out.println(state);
     }
 }

@@ -1,0 +1,17 @@
+<reservedWords,package>
+<variable,Lexical>
+<end,;>
+<reservedWords,public>
+<reservedWords,class>
+<variable,Input>
+<block,{>
+<reservedWords,int>
+<variable,i>
+<operator,=>
+<number,0>
+<end,;>
+<variable,i>
+<operator,+=>
+<number,1>
+<end,;>
+<block,}>
