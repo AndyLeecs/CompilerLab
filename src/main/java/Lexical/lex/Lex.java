@@ -1,8 +1,11 @@
-package Lexical;
+package Lexical.lex;
+
+import Lexical.Storage;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Lex {
     private static final String name = "simple";
@@ -20,19 +23,19 @@ public class Lex {
     private void handle() throws IOException, ClassNotFoundException {
         BufferedReader br =
                 new BufferedReader(new InputStreamReader
-                        (new FileInputStream(new File(Lex.class.getClassLoader().getResource(name + "rule.txt").getPath())),
+                        (new FileInputStream(new File(Objects.requireNonNull(Lex.class.getClassLoader().getResource(name + "rule.txt")).getPath())),
                                 "UTF-8"));
         String line;
-        ArrayList<RE> reList = new ArrayList<RE>();
+        ArrayList<RE> reList = new ArrayList<>();
         DFA.allow = br.readLine().toCharArray();
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList<>();
         while ((line = br.readLine()) != null && line.length() > 0) {
             String[] strs = line.split(" ");
             reList.add(new RE(strs[1]));
             names.add(strs[0]);
         }
         br.close();
-        ArrayList<FANode> nfaList = new ArrayList<FANode>();
+        ArrayList<FANode> nfaList = new ArrayList<>();
         for (RE re : reList) {
             FANode fanode = re.toNFA();
             nfaList.add(fanode);

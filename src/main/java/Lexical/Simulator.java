@@ -1,5 +1,7 @@
 package Lexical;
 
+import Lexical.lex.Dstate;
+
 import java.util.List;
 import java.util.Stack;
 
@@ -8,7 +10,7 @@ public class Simulator {
     public static TokenAndPos check(int start, char[] input, List<Dstate> finalminDFA) {
         char c;
         Dstate dstate = finalminDFA.get(0);
-        Stack<Dstate> stack = new Stack<Dstate>();
+        Stack<Dstate> stack = new Stack<>();
         stack.push(dstate);
         int ptr = start;
         StringBuffer s = new StringBuffer();

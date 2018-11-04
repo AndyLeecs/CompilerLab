@@ -1,11 +1,11 @@
-package Lexical;
+package Lexical.lex;
 
 import java.util.*;
 
 public class DFA {
     public static char[] allow;
-    private ArrayList<FANode> nodes = new ArrayList<FANode>();
-    private ArrayList<Dstate> dstates = new ArrayList<Dstate>();
+    private ArrayList<FANode> nodes = new ArrayList<>();
+    private ArrayList<Dstate> dstates = new ArrayList<>();
 
     public List<Dstate> toMinDFA(ArrayList<FANode> nfaList, ArrayList<String> names) {
         //merge NFAs
@@ -16,7 +16,7 @@ public class DFA {
         getChildren(nfa);
 
         //子集构造法
-        ArrayList<FANode> nodesToGetClosure = new ArrayList<FANode>();
+        ArrayList<FANode> nodesToGetClosure = new ArrayList<>();
         nodesToGetClosure.add(nodes.get(0));
         dstates.add(epiclosure(nodesToGetClosure));
         Dstate cur;
@@ -31,12 +31,12 @@ public class DFA {
         //DFA TO MIN_DFA
 
         //初始分划，按照是否是终结态划分
-        ArrayList<ArrayList<Dstate>> partition = new ArrayList<ArrayList<Dstate>>();
-        ArrayList<Dstate> finals = new ArrayList<Dstate>();
-        ArrayList<Dstate> unfinals = new ArrayList<Dstate>();
+        ArrayList<ArrayList<Dstate>> partition = new ArrayList<>();
+        ArrayList<Dstate> finals = new ArrayList<>();
+        ArrayList<Dstate> unfinals = new ArrayList<>();
 
         //找到终结态FAnode(reserveWords的node优先考虑)
-        ArrayList<FANode> last = new ArrayList<FANode>();
+        ArrayList<FANode> last = new ArrayList<>();
         for (FANode node : nodes) {
             if (node.getState() == -1) {
                 last.add(node);
@@ -59,7 +59,7 @@ public class DFA {
         partition.add(finals);
         partition.add(unfinals);
 
-        ArrayList<ArrayList<Dstate>> newPartition = new ArrayList<ArrayList<Dstate>>();
+        ArrayList<ArrayList<Dstate>> newPartition = new ArrayList<>();
         newPartition.addAll(partition);
         //进一步分划
         //对分划中的每一个组G
@@ -67,11 +67,11 @@ public class DFA {
             for (int i = 0; i < partition.size(); i++) {
                 ArrayList<Dstate> group = partition.get(i);
                 System.out.println(group.size());
-                ArrayList<ArrayList<Dstate>> newGroups = new ArrayList<ArrayList<Dstate>>();
+                ArrayList<ArrayList<Dstate>> newGroups = new ArrayList<>();
                 //将group划分成更小的组
                 for (Dstate dstate : group) {
                     if (newGroups.isEmpty()) {
-                        ArrayList<Dstate> newgroup = new ArrayList<Dstate>();
+                        ArrayList<Dstate> newgroup = new ArrayList<>();
                         newgroup.add(dstate);
                         newGroups.add(newgroup);
                     } else {
@@ -84,7 +84,7 @@ public class DFA {
                                 break;
                             }
                             if (newGroups.indexOf(newgroup) == (newGroups.size() - 1)) {
-                                ArrayList<Dstate> singlegroup = new ArrayList<Dstate>();
+                                ArrayList<Dstate> singlegroup = new ArrayList<>();
                                 singlegroup.add(dstate);
                                 newGroups.add(singlegroup);
                             }
@@ -105,7 +105,7 @@ public class DFA {
         }
 
         //在各组中选择代表
-        ArrayList<Dstate> finalDstates = new ArrayList<Dstate>();
+        ArrayList<Dstate> finalDstates = new ArrayList<>();
         Dstate start = (Dstate) dstates.toArray()[0];
         finalDstates.add(start);
         for (ArrayList<Dstate> group : partition) {
@@ -165,7 +165,6 @@ public class DFA {
     private Dstate findInDStates(Dstate target) {
         for (Dstate state : dstates) {
             if (state.equals(target)) {
-//                System.out.println("already have the state");
                 return state;
             }
         }
@@ -174,7 +173,7 @@ public class DFA {
     }
 
     private Dstate getMoveBy(char c, Dstate cur) {
-        List<FANode> list = new ArrayList<FANode>();
+        List<FANode> list = new ArrayList<>();
         for (FANode node : cur.getEpiclosure()) {
             if (node.getC() == c) {
                 list.add(node.getOutnodes().get(0));
@@ -193,8 +192,8 @@ public class DFA {
 
     private Dstate epiclosure(List<FANode> list) {
         //原状态压栈,初始化返回值列表
-        Stack<FANode> stack = new Stack<FANode>();
-        List<FANode> finalepiclosure = new ArrayList<FANode>();
+        Stack<FANode> stack = new Stack<>();
+        List<FANode> finalepiclosure = new ArrayList<>();
         for (FANode faNode : list) {
             stack.push(faNode);
             finalepiclosure.add(faNode);
@@ -214,16 +213,13 @@ public class DFA {
                 }
             }
         }
-        Dstate res = new Dstate(finalepiclosure);
-//        dstates.add(res);
-        return res;
+        return new Dstate(finalepiclosure);
     }
 
     private void getChildren(FANode nfa) {
-        FANode cur = nfa;
         int state = nfa.getState();
-        nodes.add(cur);
-        cur.setVisited();
+        nodes.add(nfa);
+        nfa.setVisited();
         if (state == -1) return;
         ArrayList<FANode> out = nfa.getOutnodes();
         for (int i = 0; i < out.size(); i++) {

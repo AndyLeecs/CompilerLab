@@ -1,4 +1,4 @@
-package Lexical;
+package Lexical.lex;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class FANode implements Serializable {
     boolean visited = false;
     private int state; //1代表只有一条出边，此时char为出边上的字母，0代表有两条epi出边，-1代表终结态,2表示有多条epi出边,-2表示未指定其状态
-    private ArrayList<FANode> outnodes = new ArrayList<FANode>();
+    private ArrayList<FANode> outnodes = new ArrayList<>();
     private char c = '\0';
     private FANode endAt;
     private String name = "";//用于标识终结态的名字
@@ -48,14 +48,9 @@ public class FANode implements Serializable {
         return state;
     }
 
-    public void setState(int state) {
-        this.state = state;
-    }
-
     public void addToOutNodes(FANode FANode) {
         outnodes.add(FANode);
         checkState();
-//        System.out.println(state);
     }
 
     private void checkState() {

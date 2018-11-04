@@ -12,8 +12,6 @@ public class Writer {
 
         File outputFile = new File(inputFile + "res.txt");
 
-        if (!outputFile.exists())
-            outputFile.createNewFile();
         BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile, false));
 
         for (Token t : output) {

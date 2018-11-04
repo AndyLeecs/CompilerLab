@@ -1,4 +1,4 @@
-package Lexical;
+package Lexical.lex;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Dstate implements Serializable {
-    int tag; //标记在最终partition中group的index
-    private List<FANode> epiclosure = new ArrayList<FANode>();
-    private Map<Character, Dstate> Dtrans = new HashMap<Character, Dstate>();
+    private int tag; //标记在最终partition中group的index
+    private List<FANode> epiclosure = new ArrayList<>();
+    private Map<Character, Dstate> Dtrans = new HashMap<>();
     private String name = "";//标记终结态的名字
 
     public Dstate() {

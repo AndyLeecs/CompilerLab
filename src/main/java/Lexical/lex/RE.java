@@ -1,12 +1,12 @@
-package Lexical;
+package Lexical.lex;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class RE {
-    private String content = "";
+    private String content;
 
-    public RE(String content) {
+    RE(String content) {
         this.content = content;
     }
 
@@ -26,8 +26,8 @@ public class RE {
         return postToNfa(postContent);
     }
 
-    public FANode postToNfa(String s) {
-        Stack<FANode> stack = new Stack<FANode>();
+    private FANode postToNfa(String s) {
+        Stack<FANode> stack = new Stack<>();
         for (int i = 0; i < s.length(); i++) {
             char cur = s.charAt(i);
             if (!isOperator(cur)) {
@@ -50,9 +50,7 @@ public class RE {
                 stack.push(res);
             }
         }
-
-        FANode node = stack.pop();
-        return node;
+        return stack.pop();
     }
 
     private FANode closure(FANode later) {
@@ -60,12 +58,12 @@ public class RE {
         FANode start = new FANode(0);
         FANode end = new FANode(-1);
         //开始节点连接到结束节点，和原来的开始节点上
-        ArrayList<FANode> listToAddToStart = new ArrayList<FANode>();
+        ArrayList<FANode> listToAddToStart = new ArrayList<>();
         listToAddToStart.add(later);
         listToAddToStart.add(end);
         start.setOutnodes(listToAddToStart);
         //原来的结束节点连接到新结束节点和原来的开始节点上
-        ArrayList<FANode> listToAdd = new ArrayList<FANode>();
+        ArrayList<FANode> listToAdd = new ArrayList<>();
         listToAdd.add(end);
         listToAdd.add(later);
         findLastAndAddOutNodes(later, listToAdd);
@@ -79,12 +77,12 @@ public class RE {
         FANode start = new FANode(0);
         FANode end = new FANode(-1);
         //开始节点连接到原来的两个开始节点上
-        ArrayList<FANode> listToAddToStart = new ArrayList<FANode>();
+        ArrayList<FANode> listToAddToStart = new ArrayList<>();
         listToAddToStart.add(former);
         listToAddToStart.add(later);
         start.setOutnodes(listToAddToStart);
 
-        ArrayList<FANode> listToAdd = new ArrayList<FANode>();
+        ArrayList<FANode> listToAdd = new ArrayList<>();
         listToAdd.add(end);
         findLastAndAddOutNodes(former, listToAdd);
         findLastAndAddOutNodes(later, listToAdd);
@@ -97,7 +95,7 @@ public class RE {
 
 //        ArrayList<FANode> toConcat = later.getOutnodes();
         //连接former和later
-        ArrayList<FANode> toConcat = new ArrayList<FANode>();
+        ArrayList<FANode> toConcat = new ArrayList<>();
         toConcat.add(later);
         findLastAndAddOutNodes(former, toConcat);
         //把该小自动机置终结态为later的终结态
@@ -125,8 +123,8 @@ public class RE {
     }
 
     private String getPostContent(String s) {
-        Stack<Character> stack = new Stack<Character>();
-        StringBuffer res = new StringBuffer();
+        Stack<Character> stack = new Stack<>();
+        StringBuilder res = new StringBuilder();
         int i = 0;
         while (i < s.length()) {
             char cur = s.charAt(i);
@@ -166,7 +164,7 @@ public class RE {
     }
 
     private String getContentAfterAddingDots() {
-        StringBuffer contentAfterAddingDots = new StringBuffer();
+        StringBuilder contentAfterAddingDots = new StringBuilder();
         char[] chars = content.toCharArray();
         char last = '\0';
         for (int i = 0; i < chars.length; i++) {
@@ -178,8 +176,7 @@ public class RE {
             contentAfterAddingDots.append(cur);
             last = cur;
         }
-        String s = contentAfterAddingDots.toString();
-        return s;
+        return contentAfterAddingDots.toString();
     }
 
     private boolean isOperator(char c) {
