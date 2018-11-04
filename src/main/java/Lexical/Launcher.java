@@ -7,7 +7,7 @@ public class Launcher {
     {
         try {
             new Lex().handle();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

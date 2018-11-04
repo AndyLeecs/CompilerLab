@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lex {
-    private static final String name = "Input";
-    public void handle() throws IOException {
+    private static final String name = "simple";
+    public void handle() throws IOException, ClassNotFoundException {
         BufferedReader br =
                 new BufferedReader(new InputStreamReader
                         (new FileInputStream(new File(Lex.class.getClassLoader().getResource(name+"rule.txt").getPath())),
@@ -36,6 +36,10 @@ public class Lex {
                 System.out.println("find reservedWords");
             }
         }
+        Storage.store(finalminDFA,new FileOutputStream(new File("a.xml")));
+        System.out.println("store finished");
+        finalminDFA = (List<Dstate>)Storage.load(new FileInputStream("a.xml"));
+        System.out.println("load finished"+finalminDFA.get(0));
         char[] input = Reader.read(name+".txt");
         int start = 0;
         int end = 0;
@@ -65,6 +69,7 @@ public class Lex {
 //        for(Token token : tokens){
 ////            System.out.println(token);
 ////        }
+        System.out.println("start to write result");
         Writer.output(tokens, this.getClass().getClassLoader().getResource(name+".txt").getPath());
     }
 }

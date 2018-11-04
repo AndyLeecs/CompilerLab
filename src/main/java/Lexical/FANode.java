@@ -1,8 +1,9 @@
 package Lexical;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class FANode {
+public class FANode implements Serializable{
     private int state; //1代表只有一条出边，此时char为出边上的字母，0代表有两条epi出边，-1代表终结态,2表示有多条epi出边,-2表示未指定其状态
     private ArrayList<FANode> outnodes = new ArrayList<FANode>();
     private char c = '\0';

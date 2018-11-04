@@ -1,11 +1,12 @@
 package Lexical;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Dstate {
+public class Dstate implements Serializable{
     private List<FANode> epiclosure = new ArrayList<FANode>();
     private Map<Character, Dstate> Dtrans = new HashMap<Character, Dstate>();
     private boolean isEnd;
@@ -28,6 +29,7 @@ public class Dstate {
         this.name = name;
     }
 
+    public Dstate(){}
     public Dstate(List<FANode> epiclosure){
         this.epiclosure = epiclosure;
     }

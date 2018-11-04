@@ -40,31 +40,32 @@ public class DFA {
 
         //找到终结态FAnode(reserveWords的node优先考虑)
         ArrayList<FANode> last = new ArrayList<FANode>();
-        ArrayList<FANode> reserves = new ArrayList<>();
+//        ArrayList<FANode> reserves = new ArrayList<>();
         for (FANode node : nodes) {
             if (node.getState() == -1) {
-                if(node.getName().equals("reservedWords"))
-                {
-                    System.out.println("find reserved Words");
-                    reserves.add(node);
-                }else last.add(node);
+//                if(node.getName().equals("reservedWords"))
+//                {
+//                    System.out.println("find reserved Words");
+//                    reserves.add(node);
+//                }else
+                    last.add(node);
             }
         }
         System.out.println("last"+last.size());
-        System.out.println("reserves"+reserves.size());
+//        System.out.println("reserves"+reserves.size());
         for (Dstate dstate : dstates) {
             List<FANode> closure = dstate.getEpiclosure();
-            for (FANode reserve : reserves) {
-                if (closure.contains(reserve)) {
-//                    System.out.println(node.getName());
-//                    if(dstate.getName()!=null && !dstate.getName().equals("reservedWords"))
-                    dstate.setName(reserve.getName());
-                    System.out.println("I am a reserved word");
-                    finals.add(dstate);
-                    break;
-                }
-            }
-            if (!finals.contains(dstate)) {
+//            for (FANode reserve : reserves) {
+//                if (closure.contains(reserve)) {
+////                    System.out.println(node.getName());
+////                    if(dstate.getName()!=null && !dstate.getName().equals("reservedWords"))
+//                    dstate.setName(reserve.getName());
+//                    System.out.println("I am a reserved word");
+//                    finals.add(dstate);
+//                    break;
+//                }
+//            }
+//            if (!finals.contains(dstate)) {
                 for (FANode node : last) {
                     if (closure.contains(node)) {
 //                    System.out.println(node.getName());
@@ -72,7 +73,7 @@ public class DFA {
                         dstate.setName(node.getName());
                         finals.add(dstate);
                         break;
-                    }
+//                    }
                 }
             }
             if (!finals.contains(dstate))
