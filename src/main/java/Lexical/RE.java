@@ -172,7 +172,7 @@ public class RE {
             }
             i++;
 //            System.out.println(res.toString());
-            if(!stack.isEmpty())System.out.println("stack"+stack.peek());
+//            if(!stack.isEmpty())System.out.println("stack"+stack.peek());
         }
 
         while(!stack.isEmpty())
@@ -224,6 +224,7 @@ public class RE {
             FANode fa = list.get(i);
             System.out.println("endAt" + fa.getEndAt());
             fa.getEndAt().setName(names.get(i));
+            System.out.println(fa.getEndAt()+ " "+names.get(i));
             start.addToOutNodes(fa);
         }
         return start;

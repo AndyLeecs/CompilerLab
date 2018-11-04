@@ -19,7 +19,7 @@ public class Reader {
             char c;
             while(cur < line.length())
             {
-                if((line.charAt(cur)) != '\t' && (c = line.charAt(cur)) != ' '){
+                if((c = line.charAt(cur)) != '\t'){
                     res[idx++] = c;
                 }
                 cur++;

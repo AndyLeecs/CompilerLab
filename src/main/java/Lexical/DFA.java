@@ -38,19 +38,41 @@ public class DFA {
         ArrayList<Dstate> finals = new ArrayList<Dstate>();
         ArrayList<Dstate> unfinals = new ArrayList<Dstate>();
 
-        //找到终结态FAnode
+        //找到终结态FAnode(reserveWords的node优先考虑)
         ArrayList<FANode> last = new ArrayList<FANode>();
+        ArrayList<FANode> reserves = new ArrayList<>();
         for (FANode node : nodes) {
             if (node.getState() == -1) {
-                last.add(node);
+                if(node.getName().equals("reservedWords"))
+                {
+                    System.out.println("find reserved Words");
+                    reserves.add(node);
+                }else last.add(node);
             }
         }
+        System.out.println("last"+last.size());
+        System.out.println("reserves"+reserves.size());
         for (Dstate dstate : dstates) {
-            for (FANode node : last) {
-                if (dstate.getEpiclosure().contains(node)) {
-                    dstate.setName(node.getName());
+            List<FANode> closure = dstate.getEpiclosure();
+            for (FANode reserve : reserves) {
+                if (closure.contains(reserve)) {
+//                    System.out.println(node.getName());
+//                    if(dstate.getName()!=null && !dstate.getName().equals("reservedWords"))
+                    dstate.setName(reserve.getName());
+                    System.out.println("I am a reserved word");
                     finals.add(dstate);
                     break;
+                }
+            }
+            if (!finals.contains(dstate)) {
+                for (FANode node : last) {
+                    if (closure.contains(node)) {
+//                    System.out.println(node.getName());
+//                    if(dstate.getName()!=null && !dstate.getName().equals("reservedWords"))
+                        dstate.setName(node.getName());
+                        finals.add(dstate);
+                        break;
+                    }
                 }
             }
             if (!finals.contains(dstate))
@@ -59,6 +81,8 @@ public class DFA {
 
         partition.add(finals);
         partition.add(unfinals);
+        System.out.println("finals"+finals.size());
+        System.out.println("unfinals"+unfinals.size());
 
         ArrayList<ArrayList<Dstate>> newPartition = new ArrayList<ArrayList<Dstate>>();
         newPartition.addAll(partition);
@@ -76,7 +100,7 @@ public class DFA {
                         newgroup.add(dstate);
                         newGroups.add(newgroup);
                     } else {
-                        System.out.println("start checking same group");
+//                        System.out.println("start checking same group");
                         for (int j = 0; j < newGroups.size(); j++) {
                             ArrayList<Dstate> newgroup = newGroups.get(j);
                             if (newgroup.contains(dstate)) break;
@@ -166,7 +190,7 @@ public class DFA {
     private static Dstate findInDStates(Dstate target) {
         for (Dstate state : dstates) {
             if (state.equals(target)) {
-                System.out.println("already have the state");
+//                System.out.println("already have the state");
                 return state;
             }
         }
@@ -244,7 +268,7 @@ public class DFA {
         while (true) {
             c = input[ptr];
             if (c == '\n') return getTokenAndPos(start, stack, s);
-            System.out.println("start checking " + c);
+//            System.out.println("start checking " + c);
             assert dstate != null;
             dstate = dstate.getMapValue(c);
             //回退

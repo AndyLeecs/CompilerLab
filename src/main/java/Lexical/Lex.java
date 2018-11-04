@@ -17,6 +17,7 @@ public class Lex {
         ArrayList<String> names = new ArrayList<String>();
         while ((line = br.readLine()) != null && line.length() > 0) {
             String [] strs = line.split(" ");
+            //TODO: remove str[0] from RE
             reList.add(new RE(strs[0], strs[1]));
             names.add(strs[0]);
         }
@@ -28,20 +29,26 @@ public class Lex {
         }
 //        FANode mergedNFA = RE.mergeNFA(nfaList);
         List<Dstate> finalminDFA = DFA.toMinDFA(nfaList, names);
+        for (Dstate dstate : finalminDFA)
+        {
+            if (dstate.getName().equals("reservedWords")) {
+                System.out.println(dstate);
+                System.out.println("find reservedWords");
+            }
+        }
         char[] input = Reader.read(name+".txt");
         int start = 0;
         int end = 0;
         ArrayList<Token> tokens = new ArrayList<Token>();
         TokenAndPos tokenAndPos = null;
         while(input[start] != '$') {
-            if(input[start] == '\n' ) {
+            if(input[start] == '\n' || input[start] == ' ') {
                 start++;
                 continue;
             }
                 tokenAndPos = DFA.check(start, input, finalminDFA);
                 if(tokenAndPos != null){
                 end = tokenAndPos.getEnd();
-
                     StringBuffer s = new StringBuffer();
                     for(int i = start ; i <= end; i++){
                         s.append(input[i]);
