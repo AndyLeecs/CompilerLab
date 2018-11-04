@@ -13,15 +13,7 @@ public class TokenAndPos {
         return token;
     }
 
-//    public void setToken(Token token) {
-//        this.token = token;
-//    }
-
     public int getEnd() {
         return end;
     }
-
-//    public void setEnd(int end) {
-//        this.end = end;
-//    }
 }

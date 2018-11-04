@@ -18,9 +18,6 @@ public class Token {
 
     @Override
     public String toString() {
-//        if(attribute_value == 0)
-//            return "<" + token_name + ">";
-//        else
             return "<" + token_name + "," + attribute_value + ">";
     }
 }

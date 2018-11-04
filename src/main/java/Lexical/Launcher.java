@@ -10,9 +10,7 @@ public class Launcher {
     public static void main(String args[])
     {
         try {
-//            new Lex().handle();
             List<Dstate> finalminDFA = (List<Dstate>)Storage.load(new FileInputStream("a.xml"));
-            System.out.println("load finished"+finalminDFA.get(0));
             char[] input = Reader.read(name+".txt");
             int start = 0;
             int end = 0;
@@ -35,14 +33,10 @@ public class Launcher {
                 }
                 else
                 {
-                    System.out.println("no matched pattern"); //后添加具体错误信息
+                    System.out.println("no matched pattern");
                     return;
                 }
             }
-//        for(Token token : tokens){
-////            System.out.println(token);
-////        }
-            System.out.println("start to write result");
             Writer.output(tokens, name);
         } catch (Exception e) {
             e.printStackTrace();

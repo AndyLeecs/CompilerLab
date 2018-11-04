@@ -28,16 +28,4 @@ public class Storage {
         inputStream.close();
         return obj;
     }
-
-    public static void main(String args[])
-    {
-        try {
-            Storage.store("a",new FileOutputStream(new File("a.xml")));
-            String s = (String)Storage.load(new FileInputStream("a.xml"));
-            System.out.println(s);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

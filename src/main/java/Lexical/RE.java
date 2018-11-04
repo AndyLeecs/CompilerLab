@@ -18,9 +18,7 @@ public class RE {
 
     public FANode toNFA(){
         String contentAfterAddingDots = getContentAfterAddingDots();
-        System.out.println(contentAfterAddingDots);
         String postContent = getPostContent(contentAfterAddingDots);
-        System.out.println(postContent);
         return postToNfa(postContent);
     }
 
@@ -62,8 +60,6 @@ public class RE {
         //新建开始和结束节点
         FANode start = new FANode(0);
         FANode end = new FANode(-1);
-//        start.addToOutNodes(later);
-//        start.addToOutNodes(end);
         //开始节点连接到结束节点，和原来的开始节点上
         ArrayList<FANode> listToAddToStart = new ArrayList<FANode>();
         listToAddToStart.add(later);
@@ -88,15 +84,11 @@ public class RE {
         listToAddToStart.add(former);
         listToAddToStart.add(later);
         start.setOutnodes(listToAddToStart);
-//        start.addToOutNodes(former);
-//        start.addToOutNodes(later);
-//        System.out.println("start added");
 
         ArrayList<FANode> listToAdd = new ArrayList<FANode>();
         listToAdd.add(end);
         findLastAndAddOutNodes(former,listToAdd);
         findLastAndAddOutNodes(later,listToAdd);
-//        System.out.println("end added");
         //把该小自动机置终态
         start.setEndAt(end);
         return start;
@@ -119,8 +111,6 @@ public class RE {
     {
         FANode last = findLast(node);
         last.setOutnodes(outs);
-//        for(FANode n : outs)
-//            node.addToOutNodes(n);
     }
 
     private FANode findLast(FANode node)
@@ -171,8 +161,6 @@ public class RE {
                 stack.push(cur);
             }
             i++;
-//            System.out.println(res.toString());
-//            if(!stack.isEmpty())System.out.println("stack"+stack.peek());
         }
 
         while(!stack.isEmpty())
@@ -217,39 +205,13 @@ public class RE {
 
     public static FANode mergeNFA(ArrayList<FANode> list, ArrayList<String> names)
     {
-        System.out.println("listsize"+list.size());
-        System.out.println("namessize"+names.size());
         FANode start = new FANode(2);
         for (int i  = 0 ; i < list.size() ; i++) {
             FANode fa = list.get(i);
-            System.out.println("endAt" + fa.getEndAt());
             fa.getEndAt().setName(names.get(i));
-            System.out.println(fa.getEndAt()+ " "+names.get(i));
             start.addToOutNodes(fa);
         }
         return start;
     }
 
-    public static void main(String args[])
-    {
-        //tocheck DFA
-//          System.out.println(new RE("","").postToNfa("a*b*|*ab|*.ab|."));
-//        System.out.println(new RE("","").postToNfa("a*")); pass
-//        System.out.println(new RE("","").postToNfa("ab.")); // pass with indexoutofbounds
-//       System.out.println(new RE("","").postToNfa("ab|")); //pass with 2 special line(sl)
-//        System.out.println(new RE("","").postToNfa("ab|*")); //pass with 2 special line(sl)
-//        System.out.println(new RE("","").postToNfa("a*b*|*")); //pass with 2 special line(sl)
-//          System.out.println(new RE("","").postToNfa("a*b*.")); //pass
-//        System.out.println(new RE("","").postToNfa("a*b*|")); //pass
-//        ArrayList<FANode> list = new ArrayList<FANode>();
-//        list.add(new RE("","").postToNfa("a*"));
-//        list.add(new RE("","").postToNfa("ab."));
-//        System.out.println(mergeNFA(list));
-//        System.out.println();
-       new RE("","").postToNfa("a*b.");
-//        new RE("","").postToNfa("a*");
-//        System.out.println();
-//        System.out.println(new RE("","").getPostContent("a*.b"));
-//       System.out.println(new RE("","a*b").getContentAfterAddingDots());
-    }
 }

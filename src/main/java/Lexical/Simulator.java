@@ -15,7 +15,6 @@ public class Simulator {
         while (true) {
             c = input[ptr];
             if (c == '\n') return getTokenAndPos(start, stack, s);
-//            System.out.println("start checking " + c);
             assert dstate != null;
             dstate = dstate.getMapValue(c);
             //回退

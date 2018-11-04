@@ -12,7 +12,6 @@ public class DFA {
     public List<Dstate> toMinDFA(ArrayList<FANode> nfaList, ArrayList<String> names) {
         //merge NFAs
         FANode nfa = RE.mergeNFA(nfaList, names);
-        nfaList = null;
         //NFA TO DFA
 
         //得到状态编号
@@ -40,40 +39,19 @@ public class DFA {
 
         //找到终结态FAnode(reserveWords的node优先考虑)
         ArrayList<FANode> last = new ArrayList<FANode>();
-//        ArrayList<FANode> reserves = new ArrayList<>();
         for (FANode node : nodes) {
             if (node.getState() == -1) {
-//                if(node.getName().equals("reservedWords"))
-//                {
-//                    System.out.println("find reserved Words");
-//                    reserves.add(node);
-//                }else
                     last.add(node);
             }
         }
         System.out.println("last"+last.size());
-//        System.out.println("reserves"+reserves.size());
         for (Dstate dstate : dstates) {
             List<FANode> closure = dstate.getEpiclosure();
-//            for (FANode reserve : reserves) {
-//                if (closure.contains(reserve)) {
-////                    System.out.println(node.getName());
-////                    if(dstate.getName()!=null && !dstate.getName().equals("reservedWords"))
-//                    dstate.setName(reserve.getName());
-//                    System.out.println("I am a reserved word");
-//                    finals.add(dstate);
-//                    break;
-//                }
-//            }
-//            if (!finals.contains(dstate)) {
                 for (FANode node : last) {
                     if (closure.contains(node)) {
-//                    System.out.println(node.getName());
-//                    if(dstate.getName()!=null && !dstate.getName().equals("reservedWords"))
                         dstate.setName(node.getName());
                         finals.add(dstate);
                         break;
-//                    }
                 }
             }
             if (!finals.contains(dstate))
@@ -82,8 +60,6 @@ public class DFA {
 
         partition.add(finals);
         partition.add(unfinals);
-        System.out.println("finals"+finals.size());
-        System.out.println("unfinals"+unfinals.size());
 
         ArrayList<ArrayList<Dstate>> newPartition = new ArrayList<ArrayList<Dstate>>();
         newPartition.addAll(partition);

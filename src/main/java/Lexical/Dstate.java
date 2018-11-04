@@ -71,7 +71,6 @@ public class Dstate implements Serializable{
        for(FANode node1 : list){
            for(FANode node2 : epiclosure)
            {
-//               System.out.println(node1 == node2);
                if(node1 == node2)break;
                if (epiclosure.indexOf(node2) == (epiclosure.size() - 1))
                {
@@ -79,7 +78,6 @@ public class Dstate implements Serializable{
                }
            }
        }
-//       System.out.println("equal");
         return true;
     }
 }

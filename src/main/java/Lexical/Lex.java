@@ -27,7 +27,6 @@ public class Lex {
             FANode fanode = re.toNFA();
             nfaList.add(fanode);
         }
-//        FANode mergedNFA = RE.mergeNFA(nfaList);
         List<Dstate> finalminDFA = new DFA().toMinDFA(nfaList, names);
         for (Dstate dstate : finalminDFA)
         {
@@ -38,6 +37,16 @@ public class Lex {
         }
         Storage.store(finalminDFA,new FileOutputStream(new File("a.xml")));
         System.out.println("store finished");
+    }
 
+    public static void main(String args[])
+    {
+        try {
+            new Lex().handle();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
