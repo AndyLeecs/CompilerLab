@@ -6,12 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Dstate implements Serializable{
+public class Dstate implements Serializable {
+    int tag; //标记在最终partition中group的index
     private List<FANode> epiclosure = new ArrayList<FANode>();
     private Map<Character, Dstate> Dtrans = new HashMap<Character, Dstate>();
-    private boolean isEnd;
     private String name = "";//标记终结态的名字
-    int tag; //标记在最终partition中group的index
+
+    public Dstate() {
+    }
+
+    public Dstate(List<FANode> epiclosure) {
+        this.epiclosure = epiclosure;
+    }
 
     public int getTag() {
         return tag;
@@ -29,22 +35,15 @@ public class Dstate implements Serializable{
         this.name = name;
     }
 
-    public Dstate(){}
-    public Dstate(List<FANode> epiclosure){
-        this.epiclosure = epiclosure;
-    }
-
     public Map<Character, Dstate> getDtrans() {
         return Dtrans;
     }
 
-    public Dstate getMapValue(char c)
-    {
+    public Dstate getMapValue(char c) {
         return Dtrans.get(c);
     }
 
-    public void addToMap(char c, Dstate faNode)
-    {
+    public void addToMap(char c, Dstate faNode) {
         Dtrans.put(c, faNode);
     }
 
@@ -52,32 +51,22 @@ public class Dstate implements Serializable{
         return epiclosure;
     }
 
-    public boolean isMarked()
-    {
+    public boolean isMarked() {
         return !Dtrans.isEmpty();
-    }
-    public boolean isEnd() {
-        return isEnd;
-    }
-
-    public void setEpiclosure(List<FANode> epiclosure) {
-        this.epiclosure = epiclosure;
     }
 
     @Override
     public boolean equals(Object obj) {
-       List<FANode> list = ((Dstate)obj).epiclosure;
-       if(list.size() != epiclosure.size())return false;
-       for(FANode node1 : list){
-           for(FANode node2 : epiclosure)
-           {
-               if(node1 == node2)break;
-               if (epiclosure.indexOf(node2) == (epiclosure.size() - 1))
-               {
-                   return false;
-               }
-           }
-       }
+        List<FANode> list = ((Dstate) obj).epiclosure;
+        if (list.size() != epiclosure.size()) return false;
+        for (FANode node1 : list) {
+            for (FANode node2 : epiclosure) {
+                if (node1 == node2) break;
+                if (epiclosure.indexOf(node2) == (epiclosure.size() - 1)) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 }

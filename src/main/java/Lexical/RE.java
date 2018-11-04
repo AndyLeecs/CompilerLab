@@ -4,41 +4,41 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class RE {
-    private String name = "";
     private String content = "";
-    public RE(String name, String content)
-    {
-        this.name = name;
+
+    public RE(String content) {
         this.content = content;
     }
 
-    public String getName(){
-        return name;
+    public static FANode mergeNFA(ArrayList<FANode> list, ArrayList<String> names) {
+        FANode start = new FANode(2);
+        for (int i = 0; i < list.size(); i++) {
+            FANode fa = list.get(i);
+            fa.getEndAt().setName(names.get(i));
+            start.addToOutNodes(fa);
+        }
+        return start;
     }
 
-    public FANode toNFA(){
+    public FANode toNFA() {
         String contentAfterAddingDots = getContentAfterAddingDots();
         String postContent = getPostContent(contentAfterAddingDots);
         return postToNfa(postContent);
     }
 
-    public FANode postToNfa(String s)
-    {
+    public FANode postToNfa(String s) {
         Stack<FANode> stack = new Stack<FANode>();
-        for(int i = 0 ; i < s.length() ; i++)
-        {
+        for (int i = 0; i < s.length(); i++) {
             char cur = s.charAt(i);
-            if(!isOperator(cur)) {
+            if (!isOperator(cur)) {
                 FANode single = single(cur);
                 stack.push(single);
-            }
-            else{
+            } else {
                 FANode later = stack.pop();
                 FANode res = null;
-                if(cur == '*')
-                {
+                if (cur == '*') {
                     res = closure(later);
-                }else {
+                } else {
                     FANode former = stack.pop();
 
                     if (cur == '.') {
@@ -55,8 +55,7 @@ public class RE {
         return node;
     }
 
-    private FANode closure(FANode later)
-    {
+    private FANode closure(FANode later) {
         //新建开始和结束节点
         FANode start = new FANode(0);
         FANode end = new FANode(-1);
@@ -69,13 +68,13 @@ public class RE {
         ArrayList<FANode> listToAdd = new ArrayList<FANode>();
         listToAdd.add(end);
         listToAdd.add(later);
-        findLastAndAddOutNodes(later,listToAdd);
+        findLastAndAddOutNodes(later, listToAdd);
         //把该小自动机置终态
         start.setEndAt(end);
         return start;
     }
-    private FANode union(FANode former, FANode later)
-    {
+
+    private FANode union(FANode former, FANode later) {
         //新建开始和结束节点
         FANode start = new FANode(0);
         FANode end = new FANode(-1);
@@ -87,39 +86,37 @@ public class RE {
 
         ArrayList<FANode> listToAdd = new ArrayList<FANode>();
         listToAdd.add(end);
-        findLastAndAddOutNodes(former,listToAdd);
-        findLastAndAddOutNodes(later,listToAdd);
+        findLastAndAddOutNodes(former, listToAdd);
+        findLastAndAddOutNodes(later, listToAdd);
         //把该小自动机置终态
         start.setEndAt(end);
         return start;
     }
 
-    private FANode concat(FANode former, FANode later)
-    {
+    private FANode concat(FANode former, FANode later) {
 
 //        ArrayList<FANode> toConcat = later.getOutnodes();
         //连接former和later
-        ArrayList<FANode> toConcat  = new ArrayList<FANode>();
+        ArrayList<FANode> toConcat = new ArrayList<FANode>();
         toConcat.add(later);
-        findLastAndAddOutNodes(former,toConcat);
+        findLastAndAddOutNodes(former, toConcat);
         //把该小自动机置终结态为later的终结态
         former.setEndAt(later.getEndAt());
         return former;
     }
 
-    private void findLastAndAddOutNodes(FANode node, ArrayList<FANode> outs)
-    {
+    private void findLastAndAddOutNodes(FANode node, ArrayList<FANode> outs) {
         FANode last = findLast(node);
         last.setOutnodes(outs);
     }
 
-    private FANode findLast(FANode node)
-    {
+    private FANode findLast(FANode node) {
         FANode end = node.getEndAt();
         node.setEndAt(null);
         return end;
     }
-    private FANode single(char c){
+
+    private FANode single(char c) {
         FANode start = new FANode(c, 1);
         FANode end = new FANode(-1);
         start.addToOutNodes(end);
@@ -127,35 +124,25 @@ public class RE {
         return start;
     }
 
-    private String getPostContent(String s){
+    private String getPostContent(String s) {
         Stack<Character> stack = new Stack<Character>();
         StringBuffer res = new StringBuffer();
         int i = 0;
         while (i < s.length()) {
             char cur = s.charAt(i);
 
-            if(!isOperator(cur))
-            {
+            if (!isOperator(cur)) {
                 res.append(cur);
-            }
-            else if(stack.isEmpty() && isOperator(cur))
-            {
+            } else if (stack.isEmpty() && isOperator(cur)) {
                 stack.push(cur);
-            }
-            else if(cur == '(')
-            {
+            } else if (cur == '(') {
                 stack.push(cur);
-            }
-            else if(cur == ')')
-            {
+            } else if (cur == ')') {
                 while (stack.peek() != '(')
                     res.append(stack.pop());
                 stack.pop();
-            }
-            else
-            {
-                while(!stack.isEmpty()&&isOperator(stack.peek()) && !smallerPrio(stack.peek(), cur))
-                {
+            } else {
+                while (!stack.isEmpty() && isOperator(stack.peek()) && !smallerPrio(stack.peek(), cur)) {
                     res.append(stack.pop());
                 }
                 stack.push(cur);
@@ -163,20 +150,18 @@ public class RE {
             i++;
         }
 
-        while(!stack.isEmpty())
-        {
+        while (!stack.isEmpty()) {
             res.append(stack.pop());
         }
-    return res.toString();
+        return res.toString();
     }
 
     //a的优先级比b小
-    private boolean smallerPrio(char a, char b)
-    {
+    private boolean smallerPrio(char a, char b) {
         assert isOperator(a) && isOperator(b);
-        if(a == '*')return false;
-        if(a == '|' && b != '*')return false;
-        if(a == '.' && b == '.')return false;
+        if (a == '*') return false;
+        if (a == '|' && b != '*') return false;
+        if (a == '.' && b == '.') return false;
         return true;
     }
 
@@ -184,11 +169,10 @@ public class RE {
         StringBuffer contentAfterAddingDots = new StringBuffer();
         char[] chars = content.toCharArray();
         char last = '\0';
-        for (int i = 0 ; i < chars.length ; i++)
-        {
+        for (int i = 0; i < chars.length; i++) {
             char cur = chars[i];
-            if(i != 0){
-                if((last == ')' || last == '*' || !isOperator(last))&& (cur == '(' || !isOperator(cur)))
+            if (i != 0) {
+                if ((last == ')' || last == '*' || !isOperator(last)) && (cur == '(' || !isOperator(cur)))
                     contentAfterAddingDots.append('.');
             }
             contentAfterAddingDots.append(cur);
@@ -198,20 +182,8 @@ public class RE {
         return s;
     }
 
-    private boolean isOperator(char c)
-    {
+    private boolean isOperator(char c) {
         return c == '|' || c == '(' || c == ')' || c == '*' || c == '.';
-    }
-
-    public static FANode mergeNFA(ArrayList<FANode> list, ArrayList<String> names)
-    {
-        FANode start = new FANode(2);
-        for (int i  = 0 ; i < list.size() ; i++) {
-            FANode fa = list.get(i);
-            fa.getEndAt().setName(names.get(i));
-            start.addToOutNodes(fa);
-        }
-        return start;
     }
 
 }

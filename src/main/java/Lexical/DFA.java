@@ -1,11 +1,9 @@
 package Lexical;
 
-import java.io.*;
 import java.util.*;
 
 public class DFA {
     public static char[] allow;
-    private HashMap<Integer, FANode> map;
     private ArrayList<FANode> nodes = new ArrayList<FANode>();
     private ArrayList<Dstate> dstates = new ArrayList<Dstate>();
 
@@ -25,8 +23,8 @@ public class DFA {
         while ((cur = getUnmarkedState(dstates)) != null) {
             for (char c : allow) {
                 Dstate move = getMoveBy(c, cur);
-                if(move!=null)
-                move = findInDStates(move);
+                if (move != null)
+                    move = findInDStates(move);
                 cur.addToMap(c, move);
             }
         }
@@ -41,17 +39,17 @@ public class DFA {
         ArrayList<FANode> last = new ArrayList<FANode>();
         for (FANode node : nodes) {
             if (node.getState() == -1) {
-                    last.add(node);
+                last.add(node);
             }
         }
-        System.out.println("last"+last.size());
+        System.out.println("last" + last.size());
         for (Dstate dstate : dstates) {
             List<FANode> closure = dstate.getEpiclosure();
-                for (FANode node : last) {
-                    if (closure.contains(node)) {
-                        dstate.setName(node.getName());
-                        finals.add(dstate);
-                        break;
+            for (FANode node : last) {
+                if (closure.contains(node)) {
+                    dstate.setName(node.getName());
+                    finals.add(dstate);
+                    break;
                 }
             }
             if (!finals.contains(dstate))
@@ -182,7 +180,7 @@ public class DFA {
                 list.add(node.getOutnodes().get(0));
             }
         }
-        if(list.isEmpty())return null;
+        if (list.isEmpty()) return null;
         return epiclosure(list);
     }
 
@@ -236,5 +234,4 @@ public class DFA {
     }
 
 
-
- }
+}

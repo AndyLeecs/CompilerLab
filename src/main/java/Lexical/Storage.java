@@ -1,7 +1,5 @@
 package Lexical;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
 import java.io.*;
 
 public class Storage {
@@ -9,8 +7,7 @@ public class Storage {
     /**
      * 持久化对象
      */
-    public static void store(Object obj, OutputStream out) throws IOException
-    {
+    public static void store(Object obj, OutputStream out) throws IOException {
         ObjectOutputStream outputStream = new ObjectOutputStream(out);
         outputStream.writeObject(obj);
         outputStream.flush();
@@ -21,8 +18,7 @@ public class Storage {
      * 加载对象
      */
     public static Object load(InputStream in) throws IOException,
-            ClassNotFoundException
-    {
+            ClassNotFoundException {
         ObjectInputStream inputStream = new ObjectInputStream(in);
         Object obj = inputStream.readObject();
         inputStream.close();
