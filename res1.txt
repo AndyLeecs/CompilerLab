@@ -1,0 +1,16 @@
+F->i
+T->F
+E->T
+F->i
+T->F
+E->T
+F->i
+T->F
+E->E-T
+F->(E)
+T->F
+F->i
+T->T*F
+F->i
+T->T/F
+E->E+T
