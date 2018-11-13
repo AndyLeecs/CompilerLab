@@ -20,7 +20,6 @@ public class Kernel {
 
     public char getNext(){
         String s = LRHelper.syntaxlist.get(proidx);
-//        System.out.println(s);
         if (s.length() > ptr) {
             return s.charAt(ptr);
         }
@@ -31,7 +30,6 @@ public class Kernel {
     {
         int tmp = ptr+1;
         String s = LRHelper.syntaxlist.get(proidx);
-//        System.out.println(s);
         if (s.length() > tmp) {
             return s.charAt(tmp);
         }

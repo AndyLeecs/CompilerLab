@@ -11,11 +11,6 @@ public class LRTableItem implements Serializable{
         this.variety = variety;
     }
 
-    public boolean isErr()
-    {
-        return variety.equals(Variety.err);
-    }
-
     public int getVal() {
         return val;
     }

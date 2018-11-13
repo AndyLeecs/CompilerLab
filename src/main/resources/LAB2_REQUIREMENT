@@ -1,0 +1,20 @@
+Lab2
+Requirements:
+1)Input
+    Stream of characters
+    CFG(Combination of CFGs of some classes of sentences)
+2)Output
+    Sequence of derivations if top-down syntax analyzing methods are used.
+    Sequence of reductions if bottom-up syntax analyzing methods are used.
+3)Classes of sentences are defined by yourself
+4)Error handling may be included
+Methods:
+1)LL(1)
+   a)Construct LL(1) parsing table based on the CFG
+   b)Design the program using LL(1) paring table
+2)LR(1)
+   a)Construct LR(1) parsing table based on the CFG
+   b)Design the program using LR(1) paring table
+3) Generating programs based on your own YACC
+
+

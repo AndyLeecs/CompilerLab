@@ -13,7 +13,6 @@ public class Launcher {
                         "UTF-8"))) {
             String string = br.readLine();
             br.close();
-//          String string = "abbcde$";
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader
                     (new FileInputStream(new File(Launcher.class.getClassLoader().getResource("rule"+id+".txt").getPath())),
@@ -21,8 +20,8 @@ public class Launcher {
             //初始化yacc
             String nonterminal = bufferedReader.readLine();
             String terminal = bufferedReader.readLine();
-            List<Character> nonterminallist = new ArrayList<Character>(nonterminal.length());
-            List<Character> terminallist = new ArrayList<Character>(terminal.length());
+            List<Character> nonterminallist = new ArrayList<>(nonterminal.length());
+            List<Character> terminallist = new ArrayList<>(terminal.length());
             List<Character> alllist = new ArrayList<>();
 
             for (char c : nonterminal.toCharArray())
@@ -93,8 +92,6 @@ public class Launcher {
                     //        从状态栈弹出|β|个符号；
                     while (beta>0)
                     {
-//                        System.out.println(beta);
-//                        System.out.println(rule);
                         charStack.pop();
                         stateStack.pop();
                         beta--;
@@ -119,7 +116,6 @@ public class Launcher {
                 {
                     rules.add("error");
                     break;
-//                    System.err.println("error");
                 }
             }
 
@@ -129,7 +125,6 @@ public class Launcher {
             for (String rule:rules) {
                 bw.write(rule);
                 bw.newLine();
-//                System.out.println(rule);
             }
 
             bw.flush();

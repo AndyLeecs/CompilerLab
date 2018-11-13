@@ -12,25 +12,20 @@ public class LRHelper {
     public static List<Character> alllist = Arrays.asList('S','C','c','d','$');
 
 
-    public static List<List<Item>> items()
+    private static List<List<Item>> items()
     {
         List<List<Item>> c = new ArrayList<>();
         List<Item> init = new ArrayList<>();
         init.add(new Item(0,'$'));
-        System.out.println(init.get(0));
-        System.out.println("before add closure of first");
         c.add(closure(init));
-        System.out.println("init finished");
 
         int i = 0;
         while(i < c.size())
         {
-                System.out.println("check the "+i+"th item");
                 List<Item> tmp = c.get(i);
                     for (char ch : alllist)
                     {
                         List<Item> goToList = goTo(tmp,ch);
-                        System.out.println("get goTo list");
                         if (!goToList.isEmpty()&&!alreadyIn(c, goToList))
                         {
                             c.add(goToList);
@@ -38,7 +33,6 @@ public class LRHelper {
                     }
 
             i++;
-//            System.out.println(i);
         }
 
         return c;
@@ -63,7 +57,7 @@ public class LRHelper {
     private static boolean same(List<Item> list1, List<Item> list)
     {
         if (list1.size() != list.size())return false;
-        boolean found = false;
+        boolean found;
         for (Item item : list) {
             found = false;
             for (Item item1 : list1)
@@ -79,7 +73,7 @@ public class LRHelper {
         return true;
     }
 
-    public static List<Item> goTo(List<Item> items, char c)
+    private static List<Item> goTo(List<Item> items, char c)
     {
         List<Item> res = new ArrayList<>();
         for (Item item : items)
@@ -92,10 +86,9 @@ public class LRHelper {
         return res;
     }
 
-    public static List<Item> closure(final List<Item> init)
+    private static List<Item> closure(final List<Item> init)
     {
-        List<Item> res = new ArrayList<>();
-        res.addAll(init);
+        List<Item> res = new ArrayList<>(init);
         int i = 0;
         while(i<res.size())
         {
@@ -104,35 +97,27 @@ public class LRHelper {
             if (isCharInSystem(item.getNext()))
             tmp.add(item.getProAfterCur());//加入beta
             tmp.add(item.getLookahead());
-            System.out.println("the item is" + item);
-//            System.out.println(item.getNext());
-//            System.out.println(item.getLookahead());
             for (int j = 0; j < syntaxlist.size() ; j++
                  ) {
-                System.out.println("start checking "+syntaxlist.get(j));
                 if (startWith(syntaxlist.get(j), item.getNext()))
                 for (char c : first(tmp))
                 {
-                    System.out.println("in first I HAVE "+c);
                     if (!isTerminal(c))continue;
-                    System.out.println("add new item with lookahead "+c);
                     Item it = new Item(j,c );
                     if (!alreadyIn(res,it))
                         res.add(it);
                     else
                         break;
                 }
-//                System.out.println("j "+j);
             }
             i++;
-            System.out.println("i "+i);
         }
         return res;
     }
 
     //如果只有epi，返回空
     //如果传入是空（即传入是epi），返回空
-    public static List<Character> first(List<Character> list)
+    private static List<Character> first(List<Character> list)
     {
         List<Character> firstlist = new ArrayList<>();
         for (char c : list)
@@ -149,7 +134,7 @@ public class LRHelper {
         return firstlist;
     }
 
-    public static List<Character> follow(char c)
+    private static List<Character> follow(char c)
     {
         assert !isTerminal(c);
         List<Character> followlist = new ArrayList<>();
@@ -191,7 +176,7 @@ public class LRHelper {
         if (a == c)return true;
     }
         return false;
-}
+    }
 
     private static boolean isCharInSystem(char c)
     {
@@ -216,11 +201,7 @@ public class LRHelper {
 
     private static boolean startWith(final String s, char c)
     {
-        if(getHead(s) == c)
-        {
-            return true;
-        }
-        else return false;
+        return getHead(s) == c;
     }
 
     //返回s中第一个在c后面的字符
@@ -244,12 +225,6 @@ public class LRHelper {
     {
         return s.charAt(0);
     }
-
-//    private static void addChar(List<Character> list, char c)
-//    {
-//        if (c != '\0')list.add(c);
-//    }
-
 
     public static LRTable getLRTable()
     {

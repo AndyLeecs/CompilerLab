@@ -58,11 +58,7 @@ public class Item {
     @Override
     public boolean equals(Object obj) {
         Item tmp = (Item)obj;
-        if (lookahead!=tmp.lookahead)
-            return false;
-        if (!kernel.equals(tmp.kernel))
-            return false;
-        return true;
+        return lookahead == tmp.lookahead && kernel.equals(tmp.kernel);
     }
 
     @Override

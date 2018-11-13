@@ -1,0 +1,23 @@
+Lab1
+Requirements:
+1)Input
+    Stream of characters
+    REs(The number of REs is decided by yourself)
+2)Output
+    Sequence of tokens
+3)Classes of words are defined by yourself
+4)Error handling may be included
+Methods:
+1)Programming based on FA
+   a)Define some REs by yourself
+   b)Convert REs into NFAs
+   c)Merge these NFAs into a single NFA
+   d)Convert the NFA into a DFAo with minimum states
+   e)Programming based on the DFAo
+2)Generating programs based on your own Lex
+   a)Design your own Lex
+         (ⅰ)Define .l file
+         (ⅱ)Programming your own Lex
+    b)Generating programs based on your own Lex
+
+
